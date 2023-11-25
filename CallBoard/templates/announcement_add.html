@@ -1,0 +1,23 @@
+{% extends 'default.html' %}
+
+{% block title %}
+    <h2 style="text-align: center">Создайте свое объявление</h2>
+    <hr>
+{% endblock title %}
+
+{% block content %}
+
+<form action="" method="post" style="text-align: center">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="button">
+    {% if not user.is_authenticated %}
+        <a class="nav-link" href="http://127.0.0.1:8000/accounts/login/"> Авторизоваться </a>
+    {% else %}
+        <input type="submit" value="Сохранить"/>
+    {% endif %}
+    </button>
+
+</form>
+
+{% endblock content %}

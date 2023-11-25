@@ -1,0 +1,99 @@
+{% extends 'default.html' %}
+
+{% load custom_tags %}
+
+{% block title %}
+{% endblock title %}
+
+{% block content %}
+    {% if categories %}
+        <h4 style="padding-left: 20px">Количество: {{ announcements|length }}</h4>
+        <hr>
+
+        <h5 style="padding-left: 20px; padding-right: 40px">Категория: {{ cur_ctg.name }}</h5>
+    <hr><br>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <div class="container-fluid">
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <button class="btn btn-primary" type="button">
+                <a class="nav-link" href="http://127.0.0.1:8000/announcements/create/">
+                    Добавить объявление
+                </a>
+            </button>
+        </form>
+        <br><br>
+    </div>
+    {% endif %}
+
+    {% if announcements %}
+        <div class="container-fluid">
+        {% for an in announcements %}
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-primary text-white mb-4">
+                        <div class="card-body" href="{% url 'announcement_detail' an.id %}">
+                            {{ an.title|truncatechars:20 }}
+                        </div>
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link">
+                                {{ an.post_date|date:'d M Y' }}  {{ an.user.username }}
+                            </a>
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+
+    {% else %}
+        <h2 style="text-align: center">Объявлений нет !</h2>
+        <hr>
+
+    {% endif %}
+    <br>
+
+    {% if announcements %}
+        {# Пагинация #}
+
+        {# Информация о предыдущих страницах #}
+        {% if page_obj.has_previous %}
+
+    <!--    <a style="padding-left: 900px" href="?page=1">1</a>-->
+            <a style="padding-left: 850px" href="?{% url_replace page=1 %}">1</a>
+            {% if page_obj.previous_page_number != 1 %}
+                {% if page_obj.number != 2 %}
+                    ...
+                {% endif %}
+    <!--        <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>-->
+                <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+
+            {% endif %}
+
+        {% endif %}
+
+        {# Информация о текущей странице #}
+
+        {% if page_obj.number == 1 %}
+            <a style="padding-left: 850px">{{ page_obj.number }}</a>
+        {% else %}
+            {{ page_obj.number }}
+        {% endif %}
+
+        {# Информация о следующих страницах #}
+
+        {% if page_obj.has_next %}
+
+    <!--    <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>-->
+            <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+            {% if paginator.num_pages != page_obj.next_page_number %}
+                ...
+    <!--        <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>-->
+                <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+            {% endif %}
+
+        {% endif %}
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Callboard</title>
+        {% load static %}
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3">Announcements</a>
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button">
+                    <i class="fas fa-search">
+                        {% if user.is_authenticated %}
+                            <a class="nav-link" href="http://127.0.0.1:8000/accounts/logout/">
+                                Выйти
+                            </a>
+                        {% else %}
+                            <a class="nav-link" href="http://127.0.0.1:8000/accounts/login/">
+                                Войти
+                            </a>
+                        {% endif %}
+                    </i>
+                </button>
+            </form>
+            <!-- Sidebar Toggle-->
+            <!-- Navbar Search-->
+            <!-- Navbar-->
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading"></div>
+                            <a class="nav-link" href="http://127.0.0.1:8000/announcements/">
+                                <div class="sb-nav-link-icon"><h5>Объявления</h5><i class="fas fa-columns"></i></div>
+                            </a>
+                            {% if user.is_authenticated %}
+                            <a class="nav-link" href="http://127.0.0.1:8000/announcements/">
+                                <div class="sb-nav-link-icon"><h5>Ваши объявления</h5><i class="fas fa-columns"></i></div>
+                            </a>
+                            <a class="nav-link" href="http://127.0.0.1:8000/announcements/">
+                                <div class="sb-nav-link-icon"><h5>Отклики</h5><i class="fas fa-columns"></i></div>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">
+                            {% if user.is_authenticated %}
+                                Logged in as {{ user.username }}
+                            {% else %}
+                                Waiting for log in ...
+                            {% endif %}
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4" style="text-align: center">Доска объявлений</h1>
+                        <br>
+                    </div>
+                </main>
+                {% block title %}
+                {% endblock title %}
+
+                {% block content %}
+                {% endblock content %}
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Callboard Website 2023</div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
