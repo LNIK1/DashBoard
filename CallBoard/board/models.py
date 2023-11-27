@@ -25,3 +25,4 @@ class Respond(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, verbose_name='Объявление')
+    text = models.CharField(max_length=255, verbose_name='Содержание')

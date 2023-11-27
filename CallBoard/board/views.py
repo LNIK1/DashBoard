@@ -9,11 +9,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 
 from .models import Announcement, Category, Respond
-# from .filters import PostFilter
-from .forms import AnnouncementForm
+from .forms import AnnouncementForm, RespondForm
 # from .tasks import send_email_post_created
 
 
@@ -31,12 +29,6 @@ class AnnouncementList(ListView):
         context['categories'] = Category.objects.all()
 
         return context
-
-    # def post(self, request, *args, **kwargs):
-    #
-    #     if request.method == 'POST':
-    #         request.session['django_timezone'] = request.POST['timezone']
-    #         return redirect('posts')
 
 
 class AnnouncementDetail(DetailView):
@@ -56,6 +48,12 @@ class AnnouncementCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView
     model = Announcement
     template_name = 'announcement_add.html'
     success_url = reverse_lazy('successful')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model'] = 'Announcement'
+
+        return context
 
     def form_valid(self, form):
         announcement = form.save(commit=False)
@@ -109,12 +107,42 @@ class MainPageView(View):
         return render(request, 'welcome.html')
 
 
-class CategoryList(View):
+class CategoryList(ListView):
 
     model = Category
     queryset = Category.objects.all()
     template_name = 'category_list.html'
     context_object_name = 'categories'
+
+
+class RespondCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+
+    permission_required = (
+        'respond.add_post'
+    )
+
+    form_class = RespondForm
+    model = Respond
+    template_name = 'respond_add.html'
+    success_url = reverse_lazy('successful')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model'] = 'Respond'
+
+        return context
+
+    def form_valid(self, form):
+        respond = form.save(commit=False)
+
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect('/accounts/login/')
+
+        respond.user = self.request.user
+        respond.save()
+        # send_email_post_created.delay(post.id)
+
+        return super().form_valid(form)
 
 
 def announcements_in_category_list(request, id_ctg):

@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Announcement
+from .models import Announcement, Respond
 
 
 class AnnouncementForm(forms.ModelForm):
@@ -37,6 +37,30 @@ class AnnouncementForm(forms.ModelForm):
         if category is None:
             raise ValidationError({
                 "category": "Необходимо выбрать категорию"
+            })
+
+        return cleaned_data
+
+
+class RespondForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Respond
+        fields = [
+            'text',
+        ]
+        widgets = {
+            'text': forms.Textarea(attrs={'class': 'form-text', 'cols': 80, 'rows': 15}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        text = cleaned_data.get("text")
+
+        if text is None or text == "":
+            raise ValidationError({
+                "text": "Содержание не должно быть пустым"
             })
 
         return cleaned_data

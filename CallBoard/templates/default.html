@@ -38,6 +38,11 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading"></div>
+                            {% if user.is_authenticated and user.username == 'Admin' %}
+                                <a class="nav-link" href="http://127.0.0.1:8000/admin/">
+                                    <div class="sb-nav-link-icon"><h5>Панель администратора</h5><i class="fas fa-columns"></i></div>
+                                </a>
+                            {% endif %}
                             <a class="nav-link" href="http://127.0.0.1:8000/announcements/">
                                 <div class="sb-nav-link-icon"><h5>Объявления</h5><i class="fas fa-columns"></i></div>
                             </a>
