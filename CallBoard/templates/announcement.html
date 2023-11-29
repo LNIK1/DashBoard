@@ -1,5 +1,7 @@
 {% extends 'default.html' %}
 
+{% load custom_tags %}
+
 {% block title %}
 {% endblock title %}
 
@@ -7,7 +9,7 @@
     <h4 style="text-align: center">{{ announcement.title }}<br><br></h4>
     {% if user.is_authenticated %}
         <button class="btn btn-info ms-3 me-md-auto" type="button">
-            <a class="nav-link" href="http://127.0.0.1:8000/announcements/respond/create/">Откликнуться</a>
+            <a class="nav-link" href="{% url 'respond_create' %}">Откликнуться</a>
         </button>
     {% endif %}
     <h5 style="padding-left: 20px"><br>{{ announcement.pub_date|date:'d M Y' }}</h5>

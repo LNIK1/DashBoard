@@ -51,7 +51,7 @@ class RespondForm(forms.ModelForm):
             'text',
         ]
         widgets = {
-            'text': forms.Textarea(attrs={'class': 'form-text', 'cols': 80, 'rows': 15}),
+            'text': forms.Textarea(attrs={'class': 'form-text', 'cols': 220, 'rows': 20}),
         }
 
     def clean(self):

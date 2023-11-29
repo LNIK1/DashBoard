@@ -3,7 +3,7 @@
 {% load crispy_forms_filters %}
 
 {% block title %}
-    <h2 style="text-align: center">Создайте свое объявление</h2>
+    <h2 style="text-align: center">Форма создания отклика</h2>
     <hr>
 {% endblock title %}
 
@@ -12,7 +12,7 @@
 <form action="" method="post" style="text-align: center">
     {% csrf_token %}
     {{ form|crispy }}
-    <input class="btn btn-secondary btn-sm" type="submit" value="Сохранить"/>
+    <input class="btn btn-secondary btn-sm" type="submit" value="Отправить"/>
 </form>
 
 {% endblock content %}
