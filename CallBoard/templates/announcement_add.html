@@ -11,7 +11,9 @@
 
 <form action="" method="post" style="text-align: center">
     {% csrf_token %}
+    {{ form.media }}
     {{ form|crispy }}
+    <br>
     <input class="btn btn-secondary btn-sm" type="submit" value="Сохранить"/>
 </form>
 

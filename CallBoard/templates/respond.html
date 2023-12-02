@@ -1,0 +1,26 @@
+{% extends 'default.html' %}
+
+{% load custom_tags %}
+
+{% block title %}
+{% endblock title %}
+
+{% block content %}
+
+    {% if (not respond.confirmed) and (not respond.denied) %}
+        <button class="btn btn-success ms-3 me-md-auto" type="button">
+            <a class="nav-link" href="{% url 'respond_accept' respond.id %}">Принять</a>
+        </button>
+    {% endif %}
+    {% if (not respond.confirmed) and (not respond.denied) %}
+    <button class="btn btn-danger ms-3 me-md-auto" type="button">
+        <a class="nav-link" href="{% url 'respond_denied' respond.id %}">Отклонить</a>
+    </button>
+    {% endif %}
+
+    <hr>
+    <h4 style="padding-left: 20px">{{ respond.user.username }}<br><br></h4>
+    <h5 style="padding-left: 20px"><br>{{ respond.respond_date|date:'d M Y' }}<br></h5>
+    <h5 style="padding-left: 20px">{{ respond.text }}</h5>
+
+{% endblock content %}

@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django_filters',
+    'crispy_forms',
+    'crispy_bootstrap4',
+    'ckeditor',
+    'ckeditor_uploader',
     # 'django_apscheduler',
 
     'allauth',
@@ -143,6 +147,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [BASE_DIR / 'static']
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/auth/complete/'
@@ -178,3 +183,7 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

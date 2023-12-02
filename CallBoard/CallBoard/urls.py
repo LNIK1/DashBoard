@@ -21,8 +21,9 @@ from board.views import MainPageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', MainPageView.as_view()),
     path('announcements/', include('board.urls')),
     path('accounts/', include('allauth.urls')),
-    path('', MainPageView.as_view()),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     # path('auth/', include('accounts.urls')),
 ]
