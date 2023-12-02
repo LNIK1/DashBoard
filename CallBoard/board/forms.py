@@ -1,12 +1,12 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import Announcement, Respond
-# from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 class AnnouncementForm(forms.ModelForm):
 
-    # text = forms.CharField(label='Содержание', widget=CKEditorUploadingWidget())
+    text = forms.CharField(label='Содержание', widget=CKEditorUploadingWidget())
 
     class Meta:
 
@@ -16,10 +16,6 @@ class AnnouncementForm(forms.ModelForm):
             'category',
             'text',
         ]
-        widgets = {
-            'title': forms.Textarea(attrs={'class': 'form-text', 'cols': 50, 'rows': 3}),
-            'text': forms.Textarea(attrs={'class': 'form-text', 'cols': 50, 'rows': 10}),
-        }
 
     def clean(self):
         cleaned_data = super().clean()

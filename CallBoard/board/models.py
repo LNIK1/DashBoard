@@ -20,8 +20,8 @@ class Announcement(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     title = models.CharField(max_length=255, verbose_name='Заголовок')
-    # text = models.CharField(max_length=255, verbose_name='Содержание')
-    text = RichTextField(verbose_name='Содержание')
+    text = models.CharField(max_length=255, verbose_name='Содержание')
+    # text = RichTextField(verbose_name='Содержание')
 
 
 class Respond(models.Model):
