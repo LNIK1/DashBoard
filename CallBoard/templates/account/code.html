@@ -1,0 +1,26 @@
+{% extends 'default.html' %}
+
+{% load crispy_forms_filters %}
+
+{% block title %}
+{% endblock title %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center" style="margin-top: 15px">
+    <div class="row">
+        <div class="col-lg-auto text-center">
+            <h4>Введите полученный код</h4>
+            <br>
+            <form action="" method="post" style="text-align: center">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <br>
+                <input value="{{ code }}"/>
+                <input class="btn btn-secondary btn-sm" type="submit" value="Отправить"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -149,9 +149,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/auth/complete/'
-LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/auth/quit/'
+LOGIN_URL = '/user_auth/login/'
+LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/user_auth/complete/'
+LOGOUT_REDIRECT_URL = 'http://127.0.0.1:8000/user_auth/quit/'
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -185,7 +185,6 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
-CKEDITOR_IMAGE_BACKEND = os.path.join(BASE_DIR, 'images')
 
 MEDIA_URL = 'uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

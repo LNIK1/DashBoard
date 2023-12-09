@@ -1,0 +1,25 @@
+{% extends "account/base_entrance.html" %}
+
+{% load crispy_forms_filters %}
+{% load custom_tags %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center" style="margin-top: 15px">
+    <div class="row">
+        <div class="col-lg-auto text-center">
+            <form class="p-1 mt-3" method="post" style="text-align: center">
+                {% csrf_token %}
+                <h4>
+                    Уже есть аккаунт, тогда
+                    <a href="{% url 'login' %}">войдите</a>
+                </h4>
+                <br><br>
+                {{ form|crispy }}
+                <br>
+                <input class="btn btn-secondary btn-sm" type="submit" value="Зарегистрироваться"/>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

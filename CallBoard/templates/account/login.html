@@ -1,0 +1,26 @@
+{% extends "account/base_entrance.html" %}
+
+{% load crispy_forms_filters %}
+{% load custom_tags %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center" style="margin-top: 15px">
+    <div class="row">
+        <div class="col-lg-auto text-center">
+            <form class="p-1 mt-3" method="post" style="text-align: center">
+                {% csrf_token %}
+                <h4>
+                    Если у вас еще нет аккаунта, тогда
+                    <a href="{% url 'signup' %}">Зарегистрируйтесь</a>
+                </h4>
+                <br><br>
+                {{ form|crispy }}
+                <br>
+                <input class="btn btn-secondary btn-sm" type="submit" value="Войти"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

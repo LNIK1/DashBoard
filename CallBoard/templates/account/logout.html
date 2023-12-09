@@ -1,0 +1,17 @@
+{% extends "account/base_manage.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center" style="margin-top: 15px">
+    <div class="row">
+        <div class="col-lg-auto text-center">
+            <form action="" method="post" style="text-align: center">
+                {% csrf_token %}
+                <h3>Выход из системы</h3>
+                <h4>Вы действительно хотите выйти ?</h4>
+                <input class="btn btn-secondary btn-sm" type="submit" value="Выйти"/>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -21,7 +21,9 @@ class Announcement(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     title = models.CharField(max_length=255, verbose_name='Заголовок')
     text = models.CharField(max_length=255, verbose_name='Содержание')
-    # text = RichTextField(verbose_name='Содержание')
+
+    def __str__(self):
+        return self.title[:20]
 
 
 class Respond(models.Model):
@@ -35,4 +37,4 @@ class Respond(models.Model):
     denied = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.text
+        return self.text[:15]

@@ -9,6 +9,14 @@
     <h4 style="padding-left: 20px">Количество: {{ responds|length }}</h4>
     <hr><br>
 
+    <form style="padding-left: 20px" action="" method="get">
+        <br>
+        {{ filterset.form.as_p }}
+        <br>
+        <input type="submit" value="Найти" />
+        <br><br>
+    </form>
+
     {% if responds %}
         <div class="container-fluid">
         {% for res in responds %}
@@ -30,7 +38,7 @@
         </div>
 
     {% else %}
-        <h2 style="text-align: center">Откликов нет !</h2>
+        <h2 style="text-align: center">Откликов нет ...</h2>
         <hr>
 
     {% endif %}
