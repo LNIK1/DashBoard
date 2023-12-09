@@ -6,17 +6,26 @@
 {% endblock title %}
 
 {% block content %}
-
-    {% if (not respond.confirmed) and (not respond.denied) %}
-        <button class="btn btn-success ms-3 me-md-auto" type="button">
-            <a class="nav-link" href="{% url 'respond_accept' respond.id %}">Принять</a>
-        </button>
-    {% endif %}
-    {% if (not respond.confirmed) and (not respond.denied) %}
-    <button class="btn btn-danger ms-3 me-md-auto" type="button">
-        <a class="nav-link" href="{% url 'respond_denied' respond.id %}">Отклонить</a>
-    </button>
-    {% endif %}
+    <div class="row">
+        <div class="col-lg-auto text-center">
+            {% if respond.confirmed == True %}
+                <h4>Отклик принят</h4>
+            {% endif %}
+            {% if respond.denied == True %}
+                <h4>Отклик отклонен</h4>
+            {% endif %}
+            {% if respond.confirmed == False and  respond.denied == False %}
+                <button class="btn btn-success ms-3 me-md-auto" type="button">
+                    <a class="nav-link" href="{% url 'respond_accept' respond.id %}">Принять</a>
+                </button>
+            {% endif %}
+            {% if respond.confirmed == False and  respond.denied == False %}
+            <button class="btn btn-danger ms-3 me-md-auto" type="button">
+                <a class="nav-link" href="{% url 'respond_denied' respond.id %}">Отклонить</a>
+            </button>
+            {% endif %}
+        </div>
+    </div>
 
     <hr>
     <h4 style="padding-left: 20px">{{ respond.user.username }}<br><br></h4>

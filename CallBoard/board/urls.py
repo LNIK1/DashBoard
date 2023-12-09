@@ -18,8 +18,8 @@ urlpatterns = [
     path('responds_list/', RespondList.as_view(), name='responds_list'),
     path('<int:pk>/responds/create/', RespondCreate.as_view(), name='respond_create'),
     path('responds/<int:pk>/', RespondDetail.as_view(), name='respond_detail'),
-    path('responds/accept/<int:pk>/', accept_respond, name='respond_accept'),
-    path('responds/denied/<int:pk>/', denied_respond, name='respond_denied'),
+    path('responds/accept/<int:id_res>/', accept_respond, name='respond_accept'),
+    path('responds/denied/<int:id_res>/', denied_respond, name='respond_denied'),
     path('successful/announcement', successful_announcement_view, name='successful_announcement'),
     path('successful/respond', successful_respond_view, name='successful_respond'),
 ]

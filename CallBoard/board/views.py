@@ -94,12 +94,12 @@ class RespondList(ListView):
     context_object_name = 'responds'
     paginate_by = 10
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        anns_list = Announcement.objects.filter(user=self.request.user).values_list('id', flat=True)
-        context['responds'] = Respond.objects.filter(announcement__id__in=anns_list, confirmed__exact=False, denied__exact=False).order_by('-respond_date')
-
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     anns_list = Announcement.objects.filter(user=self.request.user).values_list('id', flat=True)
+    #     context['responds'] = Respond.objects.filter(announcement__id__in=anns_list, confirmed__exact=False, denied__exact=False).order_by('-respond_date')
+    #
+    #     return context
 
     def get_queryset(self):
         anns_list = Announcement.objects.filter(user=self.request.user).values_list('id', flat=True)
@@ -182,26 +182,16 @@ def successful_respond_view(request):
 @login_required
 def accept_respond(request, id_res):
 
-    respond = Respond.objects.get(id=id_res)
-    print('--------------------------')
-    print(respond.confirmed)
-    respond.confirmed = True
-    print(respond.confirmed)
-    print('--------------------------')
+    respond = Respond.objects.filter(id=id_res).update(confirmed=True)
 
     # отправить письмо автору отклика
 
-    return redirect(f'http://127.0.0.1:8000/announcements/responds/')
+    return redirect(f'http://127.0.0.1:8000/announcements/responds_list/')
 
 
 @login_required
 def denied_respond(request, id_res):
 
-    respond = Respond.objects.get(id=id_res)
-    print('--------------------------')
-    print(respond.denied)
-    respond.denied = True
-    print(respond.denied)
-    print('--------------------------')
+    respond = Respond.objects.filter(id=id_res).update(denied=True)
 
-    return redirect(f'http://127.0.0.1:8000/announcements/responds/')
+    return redirect(f'http://127.0.0.1:8000/announcements/responds_list/')
