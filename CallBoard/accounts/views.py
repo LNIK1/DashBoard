@@ -1,9 +1,8 @@
+import os
 from random import randint
 
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 
 from django.core.mail import send_mail
@@ -12,8 +11,6 @@ from django.shortcuts import render, redirect
 
 from .models import OneTimeCode
 from .forms import BaseSignupForm
-
-from CallBoard import settings
 
 
 class BaseRegisterView(CreateView):
@@ -53,11 +50,13 @@ class GetOneTimeCode(CreateView):
             code = str(randint(100000, 999999))
             OneTimeCode.objects.create(user=user_name, code=code)
             user = User.objects.get(username=user_name)
+
             send_mail(
                     subject='Код активации',
                     message=f'Ваш код активации: {code}',
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.email])
+                    from_email=os.getenv('MAIN_EMAIL'),
+                    recipient_list=[user.email]
+            )
 
     def post(self, request, *args, **kwargs):
 

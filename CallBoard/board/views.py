@@ -63,8 +63,6 @@ class AnnouncementUpdate(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
 
-        announcement = form.save(commit=False)
-
         if not self.request.user.is_authenticated:
             return HttpResponseRedirect('/accounts/login/')
 
@@ -89,22 +87,20 @@ class CategoryList(ListView):
 class RespondList(ListView):
 
     model = Respond
-    # queryset = Respond.objects.filter(announcement__id__in=[])
     template_name = 'responds.html'
     context_object_name = 'responds'
     paginate_by = 10
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     anns_list = Announcement.objects.filter(user=self.request.user).values_list('id', flat=True)
-    #     context['responds'] = Respond.objects.filter(announcement__id__in=anns_list, confirmed__exact=False, denied__exact=False).order_by('-respond_date')
-    #
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filterset'] = self.filterset
+
+        return context
 
     def get_queryset(self):
         anns_list = Announcement.objects.filter(user=self.request.user).values_list('id', flat=True)
         responds = Respond.objects.filter(
-            announcement__id__in=anns_list, confirmed__exact=False, denied__exact=False).order_by('-respond_date')
+            announcement__id__in=anns_list, denied__exact=False).order_by('-respond_date')
         queryset = responds
         self.filterset = RespondFilter(self.request.GET, queryset)
 
@@ -182,7 +178,7 @@ def successful_respond_view(request):
 @login_required
 def accept_respond(request, id_res):
 
-    respond = Respond.objects.filter(id=id_res).update(confirmed=True)
+    Respond.objects.filter(id=id_res).update(confirmed=True)
 
     # отправить письмо автору отклика
 
@@ -192,6 +188,6 @@ def accept_respond(request, id_res):
 @login_required
 def denied_respond(request, id_res):
 
-    respond = Respond.objects.filter(id=id_res).update(denied=True)
+    Respond.objects.filter(id=id_res).update(denied=True)
 
     return redirect(f'http://127.0.0.1:8000/announcements/responds_list/')
