@@ -9,10 +9,10 @@
     <div class="row">
         <div class="col-lg-auto text-center">
             {% if respond.confirmed == True %}
-                <h4>Отклик принят</h4>
+                <h4 style="padding-left: 20px">Отклик принят</h4>
             {% endif %}
             {% if respond.denied == True %}
-                <h4>Отклик отклонен</h4>
+                <h4 style="padding-left: 20px">Отклик отклонен</h4>
             {% endif %}
             {% if respond.confirmed == False and  respond.denied == False %}
                 <button class="btn btn-success ms-3 me-md-auto" type="button">

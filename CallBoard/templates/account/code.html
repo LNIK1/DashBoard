@@ -1,5 +1,6 @@
 {% extends 'default.html' %}
 
+{% load custom_tags %}
 {% load crispy_forms_filters %}
 
 {% block title %}
@@ -12,8 +13,12 @@
         <div class="col-lg-auto text-center">
             <h4>Введите полученный код</h4>
             <br>
-            <input class="text" type="text" name="code" placeholder="Введите код">
-            <input class="btn btn-primary btn-sm" type="submit" value="Отправить">
+            <form action="{% url 'code_confirm' username %}" method="post" style="text-align: center">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input class="text" type="text" name="code" placeholder="Введите код">
+                <input class="btn btn-primary btn-sm" type="submit" value="Отправить">
+            </form>
         </div>
     </div>
 </div>

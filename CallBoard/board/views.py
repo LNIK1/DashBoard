@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy
@@ -100,9 +101,15 @@ class RespondList(ListView):
     def get_queryset(self):
         anns_list = Announcement.objects.filter(user=self.request.user).values_list('id', flat=True)
         responds = Respond.objects.filter(
-            announcement__id__in=anns_list, denied__exact=False).order_by('-respond_date')
+            Q(announcement__id__in=anns_list) | Q(denied__exact=False)).order_by('-respond_date')
         queryset = responds
         self.filterset = RespondFilter(self.request.GET, queryset)
+
+        # print('--------------------- GET ------------------------')
+        # print(self.request.GET)
+        # print('--------------------- query ----------------------')
+        # print(queryset)
+        # print('--------------------------------------------------')
 
         return self.filterset.qs
 

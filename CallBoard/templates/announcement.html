@@ -10,12 +10,11 @@
     <h4 style="text-align: center">{{ announcement.title }}<br><br></h4>
     {% if user.is_authenticated %}
         <button class="btn btn-info ms-3 me-md-auto" type="button">
-<!--            {% if user != announcement.user %}-->
-<!--            <a class="nav-link" href="{% url 'respond_create' announcement.id %}">Откликнуться</a>-->
-<!--            {% else %}-->
-<!--            <a class="nav-link" href="{% url 'announcement_update' announcement.id %}">Редактировать</a>-->
-<!--            {% endif %}-->
+            {% if user != announcement.user %}
             <a class="nav-link" href="{% url 'respond_create' announcement.id %}">Откликнуться</a>
+            {% else %}
+            <a class="nav-link" href="{% url 'announcement_update' announcement.id %}">Редактировать</a>
+            {% endif %}
         </button>
     {% endif %}
     <h5 style="padding-left: 20px"><br>{{ announcement.pub_date|date:'d M Y' }}</h5>

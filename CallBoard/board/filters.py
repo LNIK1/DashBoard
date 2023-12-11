@@ -9,7 +9,7 @@ class RespondFilter(FilterSet):
     announcement = ChoiceFilter(
         field_name='announcement',
         label='Объявление',
-        lookup_expr='exact'
+        lookup_expr='in'
     )
 
     confirmed = BooleanFilter(
