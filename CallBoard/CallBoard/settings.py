@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'board',
+    'board.apps.BoardConfig',
     'accounts',
     'django.contrib.sites',
     'django.contrib.flatpages',
@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'ckeditor',
     'ckeditor_uploader',
-    # 'django_apscheduler',
 
     'allauth',
     'allauth.account',

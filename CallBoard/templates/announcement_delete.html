@@ -1,0 +1,22 @@
+{% extends 'default.html' %}
+
+{% load crispy_forms_filters %}
+
+{% block title %}
+    <h3 style="text-align: center">Удаление объявления</h3>
+    <hr>
+{% endblock title %}
+
+{% block content %}
+
+<form action="" method="post" style="text-align: center">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <p> Удалить объявление  "{{ announce.title|truncatechars:15 }} ?"</p>
+    <input type="submit" value="Удалить"/>
+    <button type="button">
+        <a class="nav-link" href="{% url 'announcements_own' %}">Отмена</a>
+    </button>
+</form>
+
+{% endblock content %}

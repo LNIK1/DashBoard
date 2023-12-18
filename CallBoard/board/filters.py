@@ -1,16 +1,10 @@
 from django import forms
-from django_filters import FilterSet, ChoiceFilter, BooleanFilter
+from django_filters import FilterSet, BooleanFilter
 
-from .models import Respond
+from .models import Respond, Announcement
 
 
 class RespondFilter(FilterSet):
-
-    announcement = ChoiceFilter(
-        field_name='announcement',
-        label='Объявление',
-        lookup_expr='in'
-    )
 
     confirmed = BooleanFilter(
         field_name='confirmed',
@@ -18,6 +12,11 @@ class RespondFilter(FilterSet):
         widget=forms.CheckboxInput,
         lookup_expr='exact'
     )
+
+    def __init__(self, *args, **kwargs):
+
+        super(RespondFilter, self).__init__(*args, **kwargs)
+        self.filters['announcement'].queryset = Announcement.objects.filter(user_id=kwargs['request'])
 
     class Meta:
 

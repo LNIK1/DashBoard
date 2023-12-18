@@ -1,17 +1,13 @@
-from django.db.models import Q
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from .models import Announcement, Category, Respond
 from .forms import AnnouncementForm, RespondForm
 from .filters import RespondFilter
-# from .tasks import send_email_post_created
-# send_email_post_created.delay(post.id)
 
 
 class AnnouncementList(ListView):
@@ -75,6 +71,7 @@ class AnnouncementDelete(LoginRequiredMixin, DeleteView):
     model = Announcement
     template_name = 'announcement_delete.html'
     success_url = reverse_lazy('announcements')
+    context_object_name = 'announce'
 
 
 class CategoryList(ListView):
@@ -93,23 +90,17 @@ class RespondList(ListView):
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
 
         return context
 
     def get_queryset(self):
-        anns_list = Announcement.objects.filter(user=self.request.user).values_list('id', flat=True)
-        responds = Respond.objects.filter(
-            Q(announcement__id__in=anns_list) | Q(denied__exact=False)).order_by('-respond_date')
-        queryset = responds
-        self.filterset = RespondFilter(self.request.GET, queryset)
 
-        # print('--------------------- GET ------------------------')
-        # print(self.request.GET)
-        # print('--------------------- query ----------------------')
-        # print(queryset)
-        # print('--------------------------------------------------')
+        queryset = Respond.objects.filter(
+             announcement__user=self.request.user.id, denied__exact=False).order_by('-respond_date')
+        self.filterset = RespondFilter(self.request.GET, queryset, request=self.request.user.id)
 
         return self.filterset.qs
 
@@ -185,9 +176,9 @@ def successful_respond_view(request):
 @login_required
 def accept_respond(request, id_res):
 
-    Respond.objects.filter(id=id_res).update(confirmed=True)
-
-    # отправить письмо автору отклика
+    respond = Respond.objects.get(id=id_res)
+    respond.confirmed = True
+    respond.save()
 
     return redirect(f'http://127.0.0.1:8000/announcements/responds_list/')
 

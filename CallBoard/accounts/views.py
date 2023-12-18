@@ -1,16 +1,18 @@
 import os
 from random import randint
 
-from django.contrib.auth import authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-
 from django.core.mail import send_mail
 from django.views.generic import TemplateView, CreateView
 from django.shortcuts import render, redirect
 
 from .models import OneTimeCode
-from .forms import BaseSignupForm
+from .forms import BaseSignupForm, OneTimeCodeForm
+
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 
 class BaseRegisterView(CreateView):
@@ -35,40 +37,38 @@ class BaseRegisterView(CreateView):
             user.is_active = False
             user.save()
 
-        return redirect('code_confirm', request.POST['username'])
+            if not OneTimeCode.objects.filter(user=user.username).exists():
+                code = str(randint(100000, 999999))
+                OneTimeCode.objects.create(user=user.username, code=code)
+                user = User.objects.get(username=user.username)
 
-
-class GetOneTimeCode(CreateView):
-
-    template_name = 'account/code.html'
-
-    def get_context_data(self, **kwargs):
-
-        user_name = self.kwargs.get('user')
-
-        if not OneTimeCode.objects.filter(user=user_name).exists():
-            code = str(randint(100000, 999999))
-            OneTimeCode.objects.create(user=user_name, code=code)
-            user = User.objects.get(username=user_name)
-
-            send_mail(
+                send_mail(
                     subject='Код активации',
                     message=f'Ваш код активации: {code}',
                     from_email=os.getenv('MAIN_EMAIL'),
                     recipient_list=[user.email]
-            )
+                )
 
-    def post(self, request, *args, **kwargs):
+        return redirect('post_code')
 
-        if 'code' in request.POST:
-            user = request.path.split('/')[-1]
-            if OneTimeCode.objects.filter(code=request.POST['code'], user=user).exists():
-                User.objects.filter(username=user).update(is_active=True)
-                OneTimeCode.objects.filter(code=request.POST['code'], user=user).delete()
+
+class GetOneTimeCode(CreateView):
+
+    form_class = OneTimeCodeForm
+    model = OneTimeCode
+    template_name = 'account/code.html'
+
+    def form_valid(self, form):
+
+        if 'code' in self.request.POST:
+            if OneTimeCode.objects.filter(code=self.request.POST['code']).exists():
+                user_list = OneTimeCode.objects.filter(code=self.request.POST['code']).values_list('user', flat=True)
+                User.objects.filter(username=user_list[0]).update(is_active=True)
+                OneTimeCode.objects.filter(code=self.request.POST['code'], user=user_list[0]).delete()
             else:
                 return render(self.request, 'account/invalid_code.html')
 
-        return redirect('login')
+        return redirect('http://127.0.0.1:8000/user_auth/login/')
 
 
 class CompleteSignView(LoginRequiredMixin, TemplateView):
@@ -79,27 +79,5 @@ class QuitView(TemplateView):
     template_name = 'account/complete_logout.html'
 
 
-def login_view(request):
-
-    username = request.POST['username']
-    password = request.POST['password']
-
-    user = authenticate(request, username=username, password=password)
-
-    if user is not None:
-        # login(request, user)
-        # OneTimeCode.objects.create(code=random.choice('12345'), user=user)
-        return render(request, '')
-
-    else:
-        pass
-
-
-def login_with_code_view(request):
-
-    username = request.POST['username']
-    code = request.POST['code']
-    # if OneTimeCode.objects.filter(code=code, user__username=username).exists():
-    #   login(request, user)
-    # else:
-    #   pass
+class PostCodeView(TemplateView):
+    template_name = 'account/code.html'
